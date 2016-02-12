@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>The LREMap Search Interface</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    Header
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                    Footer
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" size="800" header="Search Parameters" collapsible="true">
+                    <h:form>
+                        <p:growl id="msgs" showDetail="true" />
+
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel value="Name:" for="acName" />
+                            <p:autoComplete id="acName" value="#{dtLreMapSearchPanelView.name}"  
+                                            style="width:320px" 
+                                            completeMethod="#{dtLreMapSearchPanelView.completeNames}" 
+                                            minQueryLength="3" maxResults="10" 
+                                            autocomplete="true" forceSelection="true" 
+                                            placeholder='Type 3 chars to start autocompletion'/>
+                            <p:separator></p:separator><p:separator></p:separator>
+
+                            <p:outputLabel for="acType" value="Type" />
+                            <p:selectOneMenu id="acType" value="#{dtLreMapSearchPanelView.selectedGroupedType}" panelStyle="width:180px"
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Select Type" itemValue="" />
+                                <f:selectItems value="#{dtLreMapSearchPanelView.groupedtypes}" var="type" itemLabel="#{type.lremapSideTableGroupedtypePK.value}" 
+                                               itemValue="#{type}" />
+
+
+                                <p:column>
+                                    <p:graphicImage value="images/types/#{t.lremapSideTableGroupedtypePK.grouping}.png" width="20" height="20"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{t.lremapSideTableGroupedtypePK.value}" />
+                                </p:column>
+
+                            </p:selectOneMenu>
+                            <p:separator></p:separator><p:separator></p:separator>
+                            <p:outputLabel for="acAvail" value="Availability" />
+                            <p:selectOneMenu id="acAvail" value="#{dtLreMapSearchPanelView.selectedResAvail}" panelStyle="width:180px"
+                                             effect="fade" var="t" style="width:320px" filter="false" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Select Availability" itemValue="" />
+                                <f:selectItems value="#{dtLreMapSearchPanelView.resAvails}" var="type" itemLabel="#{type.lremapSideTableAvailPK.value}" 
+                                               itemValue="#{type}" />
+
+                                <p:column>
+                                    <p:graphicImage value="images/types/#{t.lremapSideTableAvailPK.grouping}.png" width="20" height="20"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{t.lremapSideTableAvailPK.value}" />
+                                </p:column>
+
+                            </p:selectOneMenu>
+                            <p:outputLabel for="acAvailO" value="Other Availability" />
+                            <p:selectOneMenu id="acAvailO" value="#{dtLreMapSearchPanelView.selectedResOtherAvail}" panelStyle="width:180px"
+                                             effect="fade" var="t" style="width:320px" filter="false" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Select Availability" itemValue="" />
+                                <f:selectItems value="#{dtLreMapSearchPanelView.resOtherAvails}" var="type" itemLabel="#{type.lremapSideTableAvailPK.value}" 
+                                               itemValue="#{type}" />
+
+                                <p:column>
+                                    <p:graphicImage value="images/types/#{t.lremapSideTableAvailPK.grouping}.png" width="20" height="20"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{t.lremapSideTableAvailPK.value}" />
+                                </p:column>
+
+                            </p:selectOneMenu>
+
+
+
+                        </h:panelGrid>
+                    </h:form>    
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:form>
+                        <p:dataTable var="res" value="#{dtPaginatorResourceNormView.groupedResNorm}" rows="20"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,20,25,50,100">
+                            <p:column headerText="Id">
+                                <f:facet name="header">
+                                    View Details
+                                </f:facet>
+                                <p:column style="width:16px">
+                                    <p:rowToggler />
+                                </p:column>
+                                <h:outputText value="#{res.ruuid}" />
+                            </p:column>
+
+                            <p:column headerText="Name">
+                                <h:outputText value="#{res.name}" />
+                            </p:column>
+
+                            <p:column headerText="Type">
+                                <h:outputText value="#{res.type}" />
+                            </p:column>
+
+                            <p:column headerText="Status">
+                                <h:outputText value="#{res.prodstatus}" />
+                            </p:column>
+                            <p:rowExpansion>
+
+                                <p:dataTable var="item" value="#{res.resNorms}">
+                                    <p:column headerText="Id">
+                                        <h:outputText value="#{item.resid}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Conference">
+                                        <h:outputText value="#{item.conf}" />
+                                    </p:column>
+                                    <p:column headerText="Year">
+                                        <h:outputText value="#{item.year}" />
+                                    </p:column>
+                                    <p:column headerText="Availability">
+                                        <h:outputText value="#{item.avail}" />
+                                    </p:column>
+                                    <p:column headerText="Modality">
+                                        <h:outputText value="#{item.modality}" />
+                                    </p:column>
+                                    <p:column headerText="Use">
+                                        <h:outputText value="#{item.resourceusage}" />
+                                    </p:column>
+
+
+                                </p:dataTable>
+                            </p:rowExpansion>
+                        </p:dataTable>
+                    </h:form>
+
+                </p:layoutUnit>
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>
+
