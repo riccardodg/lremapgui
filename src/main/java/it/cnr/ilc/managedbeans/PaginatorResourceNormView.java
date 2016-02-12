@@ -5,7 +5,7 @@
  */
 package it.cnr.ilc.managedbeans;
 
-import it.cnr.ilc.controllers.managedbeans.ResNormService;
+import it.cnr.ilc.lremap.controllers.managedbeans.ResNormService;
 import it.cnr.ilc.lremap.entities.LremapResourceNorm;
 import it.cnr.ilc.lremap.entities.viewedentities.ViewedResourceNorm;
 import it.test.Car;

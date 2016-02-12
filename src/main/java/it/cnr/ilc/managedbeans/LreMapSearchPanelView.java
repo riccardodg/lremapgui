@@ -8,7 +8,7 @@ package it.cnr.ilc.managedbeans;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import it.cnr.ilc.controllers.managedbeans.LreMapSearchPanelService;
+import it.cnr.ilc.lremap.controllers.managedbeans.LreMapSearchPanelService;
 import it.cnr.ilc.lremap.entities.LremapSideTableAvail;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtypePK;

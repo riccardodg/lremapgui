@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.cnr.ilc.controllers.converters;
+package it.cnr.ilc.lremap.converters;
 
-import it.cnr.ilc.controllers.managedbeans.LreMapSearchPanelService;
+import it.cnr.ilc.lremap.controllers.managedbeans.LreMapSearchPanelService;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtypePK;
 import javax.faces.application.FacesMessage;

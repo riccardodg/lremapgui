@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.cnr.ilc.controllers.managedbeans;
+package it.cnr.ilc.lremap.controllers.managedbeans;
 
-import it.cnr.ilc.controllers.LremapResourceNormJpaController;
-import it.cnr.ilc.controllers.LremapSideTableAvailJpaController;
-import it.cnr.ilc.controllers.LremapSideTableGroupedtypeJpaController;
+import it.cnr.ilc.lremap.controller.LremapResourceNormJpaController;
+import it.cnr.ilc.lremap.controller.LremapSideTableAvailJpaController;
+import it.cnr.ilc.lremap.controller.LremapSideTableGroupedtypeJpaController;
+import it.cnr.ilc.lremap.controllers.extended.ResourceNormExtended;
 import it.cnr.ilc.lremap.entities.LremapSideTableAvail;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
 import it.cnr.ilc.utils.MapConstants;
@@ -37,13 +38,13 @@ public class LreMapSearchPanelService {
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("it.cnr.ilc_LREMap_war_1.0-SNAPSHOTPU");
 
-    LremapResourceNormJpaController resNormController = new LremapResourceNormJpaController(emf);
+    LremapResourceNormJpaController resNormController = new ResourceNormExtended(emf);
     LremapSideTableGroupedtypeJpaController groupedtypecontroller= new LremapSideTableGroupedtypeJpaController(emf);
     LremapSideTableAvailJpaController availController = new LremapSideTableAvailJpaController(emf);
 
     public List<String> getDistinctNames() {
         if (names.isEmpty()) {
-            names = resNormController.findDistinctNamesFromLremapResourceNorm();
+            names = resNormController.findDistinctTypesFromLremapResourceNorm();
             // add Trie
 //            names.add("wordnet");
 //            names.add("wordnet3");

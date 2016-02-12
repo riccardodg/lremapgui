@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.cnr.ilc.controllers;
+package it.cnr.ilc.lremap.controller;
 
-import it.cnr.ilc.controllers.exceptions.NonexistentEntityException;
-import it.cnr.ilc.controllers.exceptions.PreexistingEntityException;
+import it.cnr.ilc.lremap.controllers.exceptions.NonexistentEntityException;
+import it.cnr.ilc.lremap.controllers.exceptions.PreexistingEntityException;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtypePK;
 import java.io.Serializable;

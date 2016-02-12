@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.cnr.ilc.controllers;
+package it.cnr.ilc.lremap.controller;
 
-import it.cnr.ilc.controllers.exceptions.NonexistentEntityException;
-import it.cnr.ilc.controllers.exceptions.PreexistingEntityException;
-import it.cnr.ilc.lremap.entities.LremapSideTableAvail;
-import it.cnr.ilc.lremap.entities.LremapSideTableAvailPK;
+import it.cnr.ilc.lremap.controllers.exceptions.NonexistentEntityException;
+import it.cnr.ilc.lremap.controllers.exceptions.PreexistingEntityException;
+import it.cnr.ilc.lremap.entities.LremapConferenceYears;
+import it.cnr.ilc.lremap.entities.LremapConferenceYearsPK;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -22,9 +22,9 @@ import javax.persistence.criteria.Root;
  *
  * @author Riccardo Del Gratta &lt;riccardo.delgratta@ilc.cnr.it&gt;
  */
-public class LremapSideTableAvailJpaController implements Serializable {
+public class LremapConferenceYearsJpaController implements Serializable {
 
-    public LremapSideTableAvailJpaController(EntityManagerFactory emf) {
+    public LremapConferenceYearsJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -33,19 +33,19 @@ public class LremapSideTableAvailJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(LremapSideTableAvail lremapSideTableAvail) throws PreexistingEntityException, Exception {
-        if (lremapSideTableAvail.getLremapSideTableAvailPK() == null) {
-            lremapSideTableAvail.setLremapSideTableAvailPK(new LremapSideTableAvailPK());
+    public void create(LremapConferenceYears lremapConferenceYears) throws PreexistingEntityException, Exception {
+        if (lremapConferenceYears.getLremapConferenceYearsPK() == null) {
+            lremapConferenceYears.setLremapConferenceYearsPK(new LremapConferenceYearsPK());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(lremapSideTableAvail);
+            em.persist(lremapConferenceYears);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findLremapSideTableAvail(lremapSideTableAvail.getLremapSideTableAvailPK()) != null) {
-                throw new PreexistingEntityException("LremapSideTableAvail " + lremapSideTableAvail + " already exists.", ex);
+            if (findLremapConferenceYears(lremapConferenceYears.getLremapConferenceYearsPK()) != null) {
+                throw new PreexistingEntityException("LremapConferenceYears " + lremapConferenceYears + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -55,19 +55,19 @@ public class LremapSideTableAvailJpaController implements Serializable {
         }
     }
 
-    public void edit(LremapSideTableAvail lremapSideTableAvail) throws NonexistentEntityException, Exception {
+    public void edit(LremapConferenceYears lremapConferenceYears) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            lremapSideTableAvail = em.merge(lremapSideTableAvail);
+            lremapConferenceYears = em.merge(lremapConferenceYears);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                LremapSideTableAvailPK id = lremapSideTableAvail.getLremapSideTableAvailPK();
-                if (findLremapSideTableAvail(id) == null) {
-                    throw new NonexistentEntityException("The lremapSideTableAvail with id " + id + " no longer exists.");
+                LremapConferenceYearsPK id = lremapConferenceYears.getLremapConferenceYearsPK();
+                if (findLremapConferenceYears(id) == null) {
+                    throw new NonexistentEntityException("The lremapConferenceYears with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -78,19 +78,19 @@ public class LremapSideTableAvailJpaController implements Serializable {
         }
     }
 
-    public void destroy(LremapSideTableAvailPK id) throws NonexistentEntityException {
+    public void destroy(LremapConferenceYearsPK id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            LremapSideTableAvail lremapSideTableAvail;
+            LremapConferenceYears lremapConferenceYears;
             try {
-                lremapSideTableAvail = em.getReference(LremapSideTableAvail.class, id);
-                lremapSideTableAvail.getLremapSideTableAvailPK();
+                lremapConferenceYears = em.getReference(LremapConferenceYears.class, id);
+                lremapConferenceYears.getLremapConferenceYearsPK();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The lremapSideTableAvail with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The lremapConferenceYears with id " + id + " no longer exists.", enfe);
             }
-            em.remove(lremapSideTableAvail);
+            em.remove(lremapConferenceYears);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -99,19 +99,19 @@ public class LremapSideTableAvailJpaController implements Serializable {
         }
     }
 
-    public List<LremapSideTableAvail> findLremapSideTableAvailEntities() {
-        return findLremapSideTableAvailEntities(true, -1, -1);
+    public List<LremapConferenceYears> findLremapConferenceYearsEntities() {
+        return findLremapConferenceYearsEntities(true, -1, -1);
     }
 
-    public List<LremapSideTableAvail> findLremapSideTableAvailEntities(int maxResults, int firstResult) {
-        return findLremapSideTableAvailEntities(false, maxResults, firstResult);
+    public List<LremapConferenceYears> findLremapConferenceYearsEntities(int maxResults, int firstResult) {
+        return findLremapConferenceYearsEntities(false, maxResults, firstResult);
     }
 
-    private List<LremapSideTableAvail> findLremapSideTableAvailEntities(boolean all, int maxResults, int firstResult) {
+    private List<LremapConferenceYears> findLremapConferenceYearsEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(LremapSideTableAvail.class));
+            cq.select(cq.from(LremapConferenceYears.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -123,20 +123,20 @@ public class LremapSideTableAvailJpaController implements Serializable {
         }
     }
 
-    public LremapSideTableAvail findLremapSideTableAvail(LremapSideTableAvailPK id) {
+    public LremapConferenceYears findLremapConferenceYears(LremapConferenceYearsPK id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(LremapSideTableAvail.class, id);
+            return em.find(LremapConferenceYears.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getLremapSideTableAvailCount() {
+    public int getLremapConferenceYearsCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<LremapSideTableAvail> rt = cq.from(LremapSideTableAvail.class);
+            Root<LremapConferenceYears> rt = cq.from(LremapConferenceYears.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

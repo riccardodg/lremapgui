@@ -1,4 +1,4 @@
-package it.cnr.ilc.controllers.exceptions;
+package it.cnr.ilc.lremap.controllers.exceptions;
 
 public class NonexistentEntityException extends Exception {
     public NonexistentEntityException(String message, Throwable cause) {

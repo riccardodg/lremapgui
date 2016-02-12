@@ -59,7 +59,7 @@
                             <p:outputLabel for="acAvail" value="Availability" />
                             <p:selectOneMenu id="acAvail" value="#{dtLreMapSearchPanelView.selectedResAvail}" panelStyle="width:180px"
                                              effect="fade" var="t" style="width:320px" filter="false" filterMatchMode="contains">
-                                <f:selectItem itemLabel="Select Availability" itemValue="" />
+                                <f:selectItem itemLabel="Select Availability" itemValue=""  />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.resAvails}" var="type" itemLabel="#{type.lremapSideTableAvailPK.value}" 
                                                itemValue="#{type}" />
 
@@ -69,14 +69,23 @@
                                 <p:column>
                                     <h:outputText value="#{t.lremapSideTableAvailPK.value}" />
                                 </p:column>
+                                
+                                 <f:selectItem itemLabel="View other values" itemValue="OA" />
+ <!--                                <p:column>
+                                    <p:graphicImage value="images/types/Other.png" width="20" height="20"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="OA" />
+                                </p:column>-->
 
                             </p:selectOneMenu>
                             <p:outputLabel for="acAvailO" value="Other Availability" />
                             <p:selectOneMenu id="acAvailO" value="#{dtLreMapSearchPanelView.selectedResOtherAvail}" panelStyle="width:180px"
-                                             effect="fade" var="t" style="width:320px" filter="false" filterMatchMode="contains">
+                                              effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
                                 <f:selectItem itemLabel="Select Availability" itemValue="" />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.resOtherAvails}" var="type" itemLabel="#{type.lremapSideTableAvailPK.value}" 
-                                               itemValue="#{type}" />
+                                               itemValue="#{type}"  
+                                               />
 
                                 <p:column>
                                     <p:graphicImage value="images/types/#{t.lremapSideTableAvailPK.grouping}.png" width="20" height="20"/>

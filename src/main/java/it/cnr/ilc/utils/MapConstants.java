@@ -11,5 +11,6 @@ package it.cnr.ilc.utils;
  */
 public class MapConstants {
     public static final String LREC="Lrec";
+    public static final String OTHER="Other";
     
 }

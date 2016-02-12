@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.cnr.ilc.controllers.managedbeans;
+package it.cnr.ilc.lremap.controllers.managedbeans;
 
 /**
  *
  * @author Riccardo Del Gratta &lt;riccardo.delgratta@ilc.cnr.it&gt;
  */
-import it.cnr.ilc.controllers.LremapResourceNormJpaController;
+import it.cnr.ilc.lremap.controller.LremapResourceNormJpaController;
 import it.cnr.ilc.lremap.entities.LremapResourceNorm;
 import it.cnr.ilc.lremap.entities.viewedentities.ViewedResourceNorm;
 import it.cnr.ilc.utils.MapUtility;
