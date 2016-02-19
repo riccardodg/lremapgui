@@ -5,7 +5,6 @@
  */
 package it.cnr.ilc.lremap.controllers.managedbeans;
 
-import it.cnr.ilc.lremap.controller.LremapResourceNormJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableAvailJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableGroupedtypeJpaController;
 import it.cnr.ilc.lremap.controllers.extended.ResourceNormExtended;
@@ -13,8 +12,6 @@ import it.cnr.ilc.lremap.entities.LremapSideTableAvail;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
 import it.cnr.ilc.utils.MapConstants;
 import it.cnr.ilc.utils.MapUtility;
-import it.cnr.ilc.utils.ResourceComplexType;
-import it.cnr.ilc.utils.TrieMetaData;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
@@ -32,34 +29,55 @@ public class LreMapSearchPanelService {
 
     private List<String> names = new ArrayList<String>();
     private List<String> types = new ArrayList<String>();
-    private List<LremapSideTableGroupedtype> groupedtypes;
-    private List<LremapSideTableAvail> resAvails=new ArrayList<LremapSideTableAvail>();
-    private List<LremapSideTableAvail> resOtherAvails=new ArrayList<LremapSideTableAvail>();
+    private List<LremapSideTableGroupedtype> groupedtypes = new ArrayList<LremapSideTableGroupedtype>();
+    private List<LremapSideTableAvail> resAvails = new ArrayList<LremapSideTableAvail>();
+    private List<LremapSideTableAvail> resOtherAvails = new ArrayList<LremapSideTableAvail>();
+    private List<LremapSideTableAvail> resAllAvails = new ArrayList<LremapSideTableAvail>();
+
+    public List<LremapSideTableAvail> getResAllAvails() {
+        return resAllAvails;
+    }
+
+    public void setResAllAvails(List<LremapSideTableAvail> resAllAvails) {
+        this.resAllAvails = resAllAvails;
+    }
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("it.cnr.ilc_LREMap_war_1.0-SNAPSHOTPU");
 
-    LremapResourceNormJpaController resNormController = new ResourceNormExtended(emf);
-    LremapSideTableGroupedtypeJpaController groupedtypecontroller= new LremapSideTableGroupedtypeJpaController(emf);
+    ResourceNormExtended resNormController = new ResourceNormExtended(emf);
+    LremapSideTableGroupedtypeJpaController groupedtypecontroller = new LremapSideTableGroupedtypeJpaController(emf);
     LremapSideTableAvailJpaController availController = new LremapSideTableAvailJpaController(emf);
 
     public List<String> getDistinctNames() {
+
         if (names.isEmpty()) {
             names = resNormController.findDistinctTypesFromLremapResourceNorm();
-            // add Trie
-//            names.add("wordnet");
-//            names.add("wordnet3");
-//            names.add("wordnet2");
-
         }
-
-        //System.err.println("names " + names);
-
         return names;
     }
 
     public List<LremapSideTableGroupedtype> getDistinctTypes() {
-        groupedtypes = groupedtypecontroller.findLremapSideTableGroupedtypeEntities();
-        return groupedtypes;
+        List<LremapSideTableGroupedtype> all = new ArrayList<LremapSideTableGroupedtype>();
+        List<LremapSideTableGroupedtype> provided = new ArrayList<LremapSideTableGroupedtype>();
+        List<LremapSideTableGroupedtype> other = new ArrayList<LremapSideTableGroupedtype>();
+
+        if (!groupedtypes.isEmpty()) {
+            return groupedtypes;
+        } else {
+
+            all = groupedtypecontroller.findLremapSideTableGroupedtypeEntities();
+            for (LremapSideTableGroupedtype res : all) {
+                if (res.getLremapSideTableGroupedtypePK().getGrouping().equals(MapConstants.OTHER)) {
+                    other.add(res);
+                } else {
+                    provided.add(res);
+                }
+            }
+            
+            groupedtypes.addAll(provided);
+            groupedtypes.addAll(other);
+            return groupedtypes;
+        }
     }
 
     /**
@@ -94,21 +112,32 @@ public class LreMapSearchPanelService {
      * @return the resAvails
      */
     public List<LremapSideTableAvail> getResAvails() {
-        List<LremapSideTableAvail> provided=new ArrayList<LremapSideTableAvail>();
-        List<LremapSideTableAvail> other=new ArrayList<LremapSideTableAvail>();
-        List<LremapSideTableAvail> all;
-        
-        all=availController.findLremapSideTableAvailEntities();
-        for (LremapSideTableAvail res: all){
-            if (res.getLremapSideTableAvailPK().getGrouping().equals(MapConstants.LREC))
-                  provided.add(res);
-            else
-                other.add(res);
-                
+        List<LremapSideTableAvail> provided = new ArrayList<LremapSideTableAvail>();
+        List<LremapSideTableAvail> other = new ArrayList<LremapSideTableAvail>();
+        List<LremapSideTableAvail> all;// =new ArrayList<LremapSideTableAvail>();
+        //List<LremapSideTableAvail> all =new ArrayList<LremapSideTableAvail>();
+        if (!resAvails.isEmpty()) {
+            return resAvails;
+        } else {
+
+            all = availController.findLremapSideTableAvailEntities();
+            for (LremapSideTableAvail res : all) {
+                if (res.getLremapSideTableAvailPK().getGrouping().equals(MapConstants.LREC)) {
+                    provided.add(res);
+                } else {
+                    other.add(res);
+                }
+
+            }
+            resAvails.addAll(provided);
+            resAvails.addAll(all);
+            setResOtherAvails(other);
+            all.addAll(provided);
+            all.addAll(other);
+            setResAllAvails(all);
+
+            return resAvails;
         }
-        resAvails.addAll(provided);
-        setResOtherAvails(other);
-        return resAvails;
     }
 
     /**

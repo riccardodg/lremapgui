@@ -34,7 +34,7 @@
                             <p:autoComplete id="acName" value="#{dtLreMapSearchPanelView.name}"  
                                             style="width:320px" 
                                             completeMethod="#{dtLreMapSearchPanelView.completeNames}" 
-                                            minQueryLength="3" maxResults="10" 
+                                            minQueryLength="3" 
                                             autocomplete="true" forceSelection="true" 
                                             placeholder='Type 3 chars to start autocompletion'/>
                             <p:separator></p:separator><p:separator></p:separator>
@@ -45,8 +45,6 @@
                                 <f:selectItem itemLabel="Select Type" itemValue="" />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.groupedtypes}" var="type" itemLabel="#{type.lremapSideTableGroupedtypePK.value}" 
                                                itemValue="#{type}" />
-
-
                                 <p:column>
                                     <p:graphicImage value="images/types/#{t.lremapSideTableGroupedtypePK.grouping}.png" width="20" height="20"/>
                                 </p:column>
@@ -54,14 +52,17 @@
                                     <h:outputText value="#{t.lremapSideTableGroupedtypePK.value}" />
                                 </p:column>
 
+
                             </p:selectOneMenu>
+
                             <p:separator></p:separator><p:separator></p:separator>
                             <p:outputLabel for="acAvail" value="Availability" />
                             <p:selectOneMenu id="acAvail" value="#{dtLreMapSearchPanelView.selectedResAvail}" panelStyle="width:180px"
-                                             effect="fade" var="t" style="width:320px" filter="false" filterMatchMode="contains">
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
                                 <f:selectItem itemLabel="Select Availability" itemValue=""  />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.resAvails}" var="type" itemLabel="#{type.lremapSideTableAvailPK.value}" 
                                                itemValue="#{type}" />
+<!--                                <p:ajax event="valueChange"  listener="#{dtLreMapSearchPanelView.test()}"/>-->
 
                                 <p:column>
                                     <p:graphicImage value="images/types/#{t.lremapSideTableAvailPK.grouping}.png" width="20" height="20"/>
@@ -69,31 +70,6 @@
                                 <p:column>
                                     <h:outputText value="#{t.lremapSideTableAvailPK.value}" />
                                 </p:column>
-                                
-                                 <f:selectItem itemLabel="View other values" itemValue="OA" />
- <!--                                <p:column>
-                                    <p:graphicImage value="images/types/Other.png" width="20" height="20"/>
-                                </p:column>
-                                <p:column>
-                                    <h:outputText value="OA" />
-                                </p:column>-->
-
-                            </p:selectOneMenu>
-                            <p:outputLabel for="acAvailO" value="Other Availability" />
-                            <p:selectOneMenu id="acAvailO" value="#{dtLreMapSearchPanelView.selectedResOtherAvail}" panelStyle="width:180px"
-                                              effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
-                                <f:selectItem itemLabel="Select Availability" itemValue="" />
-                                <f:selectItems value="#{dtLreMapSearchPanelView.resOtherAvails}" var="type" itemLabel="#{type.lremapSideTableAvailPK.value}" 
-                                               itemValue="#{type}"  
-                                               />
-
-                                <p:column>
-                                    <p:graphicImage value="images/types/#{t.lremapSideTableAvailPK.grouping}.png" width="20" height="20"/>
-                                </p:column>
-                                <p:column>
-                                    <h:outputText value="#{t.lremapSideTableAvailPK.value}" />
-                                </p:column>
-
                             </p:selectOneMenu>
 
 

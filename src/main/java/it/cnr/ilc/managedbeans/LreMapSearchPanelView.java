@@ -16,9 +16,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -33,18 +36,18 @@ public class LreMapSearchPanelView implements Serializable {
     private List<String> names = new ArrayList<String>();
     private List<String> types = new ArrayList<String>();
     private String name;
-    private List<LremapSideTableGroupedtype> groupedtypes;
+    private List<LremapSideTableGroupedtype> groupedtypes = new ArrayList<LremapSideTableGroupedtype>();
     private LremapSideTableGroupedtype type;
 
     private List<String> selectedTypeOptions;
     private List<LremapSideTableGroupedtype> selectedGroupedTypes;
     private LremapSideTableGroupedtype selectedGroupedType;
     private LremapSideTableGroupedtypePK pk;
-    
+
     private LremapSideTableAvail resAvail;
     private List<LremapSideTableAvail> resAvails;
-    private LremapSideTableAvail selectedResAvail;
-    
+    private LremapSideTableAvail selectedResAvail = new LremapSideTableAvail();
+
     private List<LremapSideTableAvail> resOtherAvails;
     private LremapSideTableAvail selectedResOtherAvail;
 
@@ -54,7 +57,8 @@ public class LreMapSearchPanelView implements Serializable {
         setNames(service.getDistinctNames());
         setGroupedtypes(service.getDistinctTypes());
         setResAvails(service.getResAvails());
-        setResOtherAvails(service.getResOtherAvails());
+        //setResAvails(service.getResAllAvails());
+        //setResOtherAvails(service.getResOtherAvails());
         //setTypes(service.getDistinctTypes());
     }
 
@@ -91,6 +95,7 @@ public class LreMapSearchPanelView implements Serializable {
         return suggestions;
     }
 
+    
     /**
      * @param service the service to set
      */
