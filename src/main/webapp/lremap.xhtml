@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
     <f:view contentType="text/html">
@@ -30,6 +29,23 @@
                         <p:growl id="msgs" showDetail="true" />
 
                         <h:panelGrid columns="2" cellpadding="5">
+                            
+                            <p:outputLabel for="acConf" value="Conference (Year)" />
+                            <p:selectOneMenu id="acConf" value="#{dtLreMapSearchPanelView.selectedResConf}" panelStyle="width:320px"
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Select A Conference" itemValue=""  />
+                                <f:selectItems value="#{dtLreMapSearchPanelView.resConfs}" 
+                                               var="type" itemLabel="#{type.lremapConferenceYearsPK.conf} (#{type.lremapConferenceYearsPK.year})" 
+                                               itemValue="#{type}" />
+
+                                <p:column>
+                                    <h:outputText value="#{t.lremapConferenceYearsPK.year}"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{t.lremapConferenceYearsPK.conf}" />
+                                </p:column>
+                            </p:selectOneMenu>
+                            <p:separator></p:separator><p:separator></p:separator>
                             <p:outputLabel value="Name:" for="acName" />
                             <p:autoComplete id="acName" value="#{dtLreMapSearchPanelView.name}"  
                                             style="width:320px" 
@@ -40,10 +56,16 @@
                             <p:separator></p:separator><p:separator></p:separator>
 
                             <p:outputLabel for="acType" value="Type" />
-                            <p:selectOneMenu id="acType" value="#{dtLreMapSearchPanelView.selectedGroupedType}" panelStyle="width:180px"
-                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                            <p:selectOneMenu id="acType" value="#{dtLreMapSearchPanelView.selectedGroupedType}" 
+                                             panelStyle="width:180px"
+                                             effect="fade" 
+                                             var="t" 
+                                             style="width:320px" 
+                                             filter="true" 
+                                             filterMatchMode="contains">
                                 <f:selectItem itemLabel="Select Type" itemValue="" />
-                                <f:selectItems value="#{dtLreMapSearchPanelView.groupedtypes}" var="type" itemLabel="#{type.lremapSideTableGroupedtypePK.value}" 
+                                <f:selectItems value="#{dtLreMapSearchPanelView.groupedtypes}" 
+                                               var="type" itemLabel="#{type.lremapSideTableGroupedtypePK.value}" 
                                                itemValue="#{type}" />
                                 <p:column>
                                     <p:graphicImage value="images/types/#{t.lremapSideTableGroupedtypePK.grouping}.png" width="20" height="20"/>
@@ -57,18 +79,73 @@
 
                             <p:separator></p:separator><p:separator></p:separator>
                             <p:outputLabel for="acAvail" value="Availability" />
-                            <p:selectOneMenu id="acAvail" value="#{dtLreMapSearchPanelView.selectedResAvail}" panelStyle="width:180px"
-                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                            <p:selectOneMenu id="acAvail" value="#{dtLreMapSearchPanelView.selectedResAvail}" 
+                                             panelStyle="width:180px"
+                                             effect="fade" 
+                                             var="t" 
+                                             style="width:320px" 
+                                             filter="true" 
+                                             filterMatchMode="contains">
                                 <f:selectItem itemLabel="Select Availability" itemValue=""  />
-                                <f:selectItems value="#{dtLreMapSearchPanelView.resAvails}" var="type" itemLabel="#{type.lremapSideTableAvailPK.value}" 
+                                <f:selectItems value="#{dtLreMapSearchPanelView.resAvails}" 
+                                               var="type" itemLabel="#{type.lremapSideTableAvailPK.value}" 
                                                itemValue="#{type}" />
-<!--                                <p:ajax event="valueChange"  listener="#{dtLreMapSearchPanelView.test()}"/>-->
 
                                 <p:column>
                                     <p:graphicImage value="images/types/#{t.lremapSideTableAvailPK.grouping}.png" width="20" height="20"/>
                                 </p:column>
                                 <p:column>
                                     <h:outputText value="#{t.lremapSideTableAvailPK.value}" />
+                                </p:column>
+                            </p:selectOneMenu>
+
+                            <p:separator></p:separator><p:separator></p:separator>
+                            <p:outputLabel for="acModality" value="Modality" />
+                            <p:selectOneMenu id="acModality" value="#{dtLreMapSearchPanelView.selectedResMod}" panelStyle="width:180px"
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Select Modality" itemValue=""  />
+                                <f:selectItems value="#{dtLreMapSearchPanelView.resMods}" 
+                                               var="type" itemLabel="#{type.value}" 
+                                               itemValue="#{type}" />
+                               <p:column>
+                                    <p:graphicImage value="images/types/#{t.grouping}.png" width="20" height="20"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{t.value}" />
+                                </p:column>
+                            </p:selectOneMenu>
+                            
+                            <p:separator></p:separator><p:separator></p:separator>
+                            <p:outputLabel for="acStatus" value="Status" />
+                            <p:selectOneMenu id="acStatus" value="#{dtLreMapSearchPanelView.selectedResStatus}" panelStyle="width:180px"
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Select Status" itemValue=""  />
+                                <f:selectItems value="#{dtLreMapSearchPanelView.resStatuses}" 
+                                               var="type" itemLabel="#{type.value}" 
+                                               itemValue="#{type}" />
+
+                                <p:column>
+                                    <p:graphicImage value="images/types/#{t.grouping}.png" width="20" height="20"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{t.value}" />
+                                </p:column>
+                            </p:selectOneMenu>
+                            
+                            <p:separator></p:separator><p:separator></p:separator>
+                            <p:outputLabel for="acUse" value="Use" />
+                            <p:selectOneMenu id="acUse" value="#{dtLreMapSearchPanelView.selectedResUse}" panelStyle="width:180px"
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Select Use" itemValue=""  />
+                                <f:selectItems value="#{dtLreMapSearchPanelView.resUses}" 
+                                               var="type" itemLabel="#{type.lremapSideTableUsePK.value}" 
+                                               itemValue="#{type}" />
+
+                                <p:column>
+                                    <p:graphicImage value="images/types/#{t.lremapSideTableUsePK.grouping}.png" width="20" height="20"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{t.lremapSideTableUsePK.value}" />
                                 </p:column>
                             </p:selectOneMenu>
 

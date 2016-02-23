@@ -17,6 +17,9 @@
     <class>it.cnr.ilc.lremap.entities.LremapResource</class>
     <class>it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype</class>
     <class>it.cnr.ilc.lremap.entities.LremapSideTableAvail</class>
+    <class>it.cnr.ilc.lremap.entities.LremapSideTableUse</class>
+    <class>it.cnr.ilc.lremap.entities.LremapSideTableModality</class>
+    <class>it.cnr.ilc.lremap.entities.LremapSideTableStatus</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/lremap_datathon?zeroDateTimeBehavior=convertToNull"/>

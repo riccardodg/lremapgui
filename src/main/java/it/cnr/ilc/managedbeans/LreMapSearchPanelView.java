@@ -9,19 +9,20 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import it.cnr.ilc.lremap.controllers.managedbeans.LreMapSearchPanelService;
+import it.cnr.ilc.lremap.entities.LremapConferenceYears;
 import it.cnr.ilc.lremap.entities.LremapSideTableAvail;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtypePK;
+import it.cnr.ilc.lremap.entities.LremapSideTableModality;
+import it.cnr.ilc.lremap.entities.LremapSideTableStatus;
+import it.cnr.ilc.lremap.entities.LremapSideTableUse;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -47,29 +48,40 @@ public class LreMapSearchPanelView implements Serializable {
     private LremapSideTableAvail resAvail;
     private List<LremapSideTableAvail> resAvails;
     private LremapSideTableAvail selectedResAvail = new LremapSideTableAvail();
+    
+    private LremapSideTableModality resMod;
+    private List<LremapSideTableModality> resMods;
+    private LremapSideTableModality selectedResMod = new LremapSideTableModality();
 
     private List<LremapSideTableAvail> resOtherAvails;
     private LremapSideTableAvail selectedResOtherAvail;
-
+    
+    
+    private LremapSideTableUse resUse;
+    private List<LremapSideTableUse> resUses;
+    private LremapSideTableUse selectedResUse = new LremapSideTableUse();
+    
+    private LremapSideTableStatus resStatus;
+    private List<LremapSideTableStatus> resStatuses;
+    private LremapSideTableStatus selectedResStatus = new LremapSideTableStatus();
+    
+    private LremapConferenceYears resConf;
+    private List<LremapConferenceYears> resConfs;
+    private LremapConferenceYears selectedResConf = new LremapConferenceYears();
     @PostConstruct
     public void init() {
         //setResNorm(service.getListOfNormResources());
         setNames(service.getDistinctNames());
         setGroupedtypes(service.getDistinctTypes());
         setResAvails(service.getResAvails());
-        //setResAvails(service.getResAllAvails());
-        //setResOtherAvails(service.getResOtherAvails());
-        //setTypes(service.getDistinctTypes());
+        setResMods(service.getResMods());
+        setResUses(service.getResUses());
+        setResStatuses(service.getResStatuses());
+        setResConfs(service.getResConfs());
+       
     }
 
-//    public List<String> completeNames(String query) {
-//        TrieMetaData namesTrie = service.getDistinctNames();
-//        System.err.println("trie -"+namesTrie.toString()+"- str -"+query+"- ");
-//        List<String> results = new ArrayList<String>();
-//        results = MapUtility.getResultFromTrie(namesTrie, query, false);
-//
-//        return results;
-//    }
+
     public List<String> completeNames(String query) {
         List<String> results = Lists.newArrayList(Collections2.filter(
                 getNames(), Predicates.containsPattern(query)));
@@ -300,6 +312,174 @@ public class LreMapSearchPanelView implements Serializable {
      */
     public void setSelectedResOtherAvail(LremapSideTableAvail selectedResOtherAvail) {
         this.selectedResOtherAvail = selectedResOtherAvail;
+    }
+
+    /**
+     * @return the resMod
+     */
+    public LremapSideTableModality getResMod() {
+        return resMod;
+    }
+
+    /**
+     * @param resMod the resMod to set
+     */
+    public void setResMod(LremapSideTableModality resMod) {
+        this.resMod = resMod;
+    }
+
+    /**
+     * @return the resMods
+     */
+    public List<LremapSideTableModality> getResMods() {
+        return resMods;
+    }
+
+    /**
+     * @param resMods the resMods to set
+     */
+    public void setResMods(List<LremapSideTableModality> resMods) {
+        this.resMods = resMods;
+    }
+
+    /**
+     * @return the selectedResMod
+     */
+    public LremapSideTableModality getSelectedResMod() {
+        return selectedResMod;
+    }
+
+    /**
+     * @param selectedResMod the selectedResMod to set
+     */
+    public void setSelectedResMod(LremapSideTableModality selectedResMod) {
+        this.selectedResMod = selectedResMod;
+    }
+
+    /**
+     * @return the resUse
+     */
+    public LremapSideTableUse getResUse() {
+        return resUse;
+    }
+
+    /**
+     * @param resUse the resUse to set
+     */
+    public void setResUse(LremapSideTableUse resUse) {
+        this.resUse = resUse;
+    }
+
+    /**
+     * @return the resUses
+     */
+    public List<LremapSideTableUse> getResUses() {
+        return resUses;
+    }
+
+    /**
+     * @param resUses the resUses to set
+     */
+    public void setResUses(List<LremapSideTableUse> resUses) {
+        this.resUses = resUses;
+    }
+
+    /**
+     * @return the selectedResUse
+     */
+    public LremapSideTableUse getSelectedResUse() {
+        return selectedResUse;
+    }
+
+    /**
+     * @param selectedResUse the selectedResUse to set
+     */
+    public void setSelectedResUse(LremapSideTableUse selectedResUse) {
+        this.selectedResUse = selectedResUse;
+    }
+
+    /**
+     * @return the resStatus
+     */
+    public LremapSideTableStatus getResStatus() {
+        return resStatus;
+    }
+
+    /**
+     * @param resStatus the resStatus to set
+     */
+    public void setResStatus(LremapSideTableStatus resStatus) {
+        this.resStatus = resStatus;
+    }
+
+    /**
+     * @return the resStatuses
+     */
+    public List<LremapSideTableStatus> getResStatuses() {
+        return resStatuses;
+    }
+
+    /**
+     * @param resStatuses the resStatuses to set
+     */
+    public void setResStatuses(List<LremapSideTableStatus> resStatuses) {
+        this.resStatuses = resStatuses;
+    }
+
+    /**
+     * @return the selectedResStatus
+     */
+    public LremapSideTableStatus getSelectedResStatus() {
+        return selectedResStatus;
+    }
+
+    /**
+     * @param selectedResStatus the selectedResStatus to set
+     */
+    public void setSelectedResStatus(LremapSideTableStatus selectedResStatus) {
+        this.selectedResStatus = selectedResStatus;
+    }
+
+    /**
+     * @return the resConf
+     */
+    public LremapConferenceYears getResConf() {
+        return resConf;
+    }
+
+    /**
+     * @param resConf the resConf to set
+     */
+    public void setResConf(LremapConferenceYears resConf) {
+        this.resConf = resConf;
+    }
+
+    /**
+     * @return the resConfs
+     */
+    public List<LremapConferenceYears> getResConfs() {
+        return resConfs;
+    }
+
+    /**
+     * @param resConfs the resConfs to set
+     */
+    public void setResConfs(List<LremapConferenceYears> resConfs) {
+        this.resConfs = resConfs;
+    }
+
+    /**
+     * @return the selectedResConf
+     */
+    public LremapConferenceYears getSelectedResConf() {
+        return selectedResConf;
+    }
+
+    /**
+     * @param selectedResConf the selectedResConf to set
+     */
+    public void setSelectedResConf(LremapConferenceYears selectedResConf) {
+        this.selectedResConf = selectedResConf;
     }
 
 }
