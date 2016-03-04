@@ -5,19 +5,22 @@
  */
 package it.cnr.ilc.lremap.controllers.managedbeans;
 
-import it.cnr.ilc.lremap.controller.LremapConferenceYearsJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableAvailJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableGroupedtypeJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableModalityJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableStatusJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableUseJpaController;
+import it.cnr.ilc.lremap.controllers.extended.ConferenceYearsJpaControllerExtended;
 import it.cnr.ilc.lremap.controllers.extended.ResourceNormExtended;
 import it.cnr.ilc.lremap.entities.LremapConferenceYears;
 import it.cnr.ilc.lremap.entities.LremapSideTableAvail;
+import it.cnr.ilc.lremap.entities.LremapSideTableAvailPK;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
+import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtypePK;
 import it.cnr.ilc.lremap.entities.LremapSideTableModality;
 import it.cnr.ilc.lremap.entities.LremapSideTableStatus;
 import it.cnr.ilc.lremap.entities.LremapSideTableUse;
+import it.cnr.ilc.lremap.entities.LremapSideTableUsePK;
 import it.cnr.ilc.utils.MapConstants;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +63,7 @@ public class LreMapSearchPanelService {
     LremapSideTableModalityJpaController modController = new LremapSideTableModalityJpaController(emf);
     LremapSideTableUseJpaController useController = new LremapSideTableUseJpaController(emf);
     LremapSideTableStatusJpaController statusController = new LremapSideTableStatusJpaController(emf);
-    LremapConferenceYearsJpaController confController = new LremapConferenceYearsJpaController(emf);
+    ConferenceYearsJpaControllerExtended confController = new ConferenceYearsJpaControllerExtended(emf);
 
     public List<String> getDistinctNames() {
 
@@ -113,6 +116,36 @@ public class LreMapSearchPanelService {
         }
     }
 
+    public LremapConferenceYears findLremapConferenceYears(Integer id) {
+        LremapConferenceYears ret = confController.findLremapConferenceYears(id);
+        return ret;
+    }
+
+    public LremapSideTableGroupedtype findLremapSideTableGroupedtype(LremapSideTableGroupedtypePK pk) {
+        LremapSideTableGroupedtype ret = groupedtypecontroller.findLremapSideTableGroupedtype(pk);
+        return ret;
+    }
+    
+    public LremapSideTableAvail findLremapSideAvail(LremapSideTableAvailPK pk) {
+        LremapSideTableAvail ret = availController.findLremapSideTableAvail(pk);
+        return ret;
+    }
+    
+    public LremapSideTableUse findLremapSideUse(LremapSideTableUsePK pk) {
+        LremapSideTableUse ret = useController.findLremapSideTableUse(pk);
+        return ret;
+    }
+    
+    public LremapSideTableModality findLremapSideModality(Integer id) {
+        LremapSideTableModality ret = modController.findLremapSideTableModality(id);
+        return ret;
+    }
+    
+    public LremapSideTableStatus findLremapSideStatus(Integer id) {
+        LremapSideTableStatus ret = statusController.findLremapSideTableStatus(id);
+        return ret;
+    }
+
     /**
      * @return the names
      */
@@ -158,6 +191,7 @@ public class LreMapSearchPanelService {
                 if (res.getLremapSideTableAvailPK().getGrouping().equals(MapConstants.LREC)) {
                     provided.add(res);
                 } else {
+
                     other.add(res);
                 }
 
@@ -315,38 +349,39 @@ public class LreMapSearchPanelService {
 
             all = confController.findLremapConferenceYearsEntities();
             for (LremapConferenceYears res : all) {
-                if (res.getLremapConferenceYearsPK().getYear().equals(MapConstants._2016_)) {
-                    cy2016.add(res);
-                }
-                if (res.getLremapConferenceYearsPK().getYear().equals(MapConstants._2015_)) {
-                    cy2015.add(res);
-                }
-
-                if (res.getLremapConferenceYearsPK().getYear().equals(MapConstants._2014_)) {
-                    cy2014.add(res);
-                }
-
-                if (res.getLremapConferenceYearsPK().getYear().equals(MapConstants._2013_)) {
-                    cy2013.add(res);
-                }
-                if (res.getLremapConferenceYearsPK().getYear().equals(MapConstants._2012_)) {
-                    cy2012.add(res);
-                }
-                if (res.getLremapConferenceYearsPK().getYear().equals(MapConstants._2011_)) {
-                    cy2011.add(res);
-                }
-                if (res.getLremapConferenceYearsPK().getYear().equals(MapConstants._2010_)) {
-                    cy2010.add(res);
-                }
+                resConfs.add(res);
+//                if (res.getYear().equals(MapConstants._2016_)) {
+//                    cy2016.add(res);
+//                }
+//                if (res.getYear().equals(MapConstants._2015_)) {
+//                    cy2015.add(res);
+//                }
+//
+//                if (res.getYear().equals(MapConstants._2014_)) {
+//                    cy2014.add(res);
+//                }
+//
+//                if (res.getYear().equals(MapConstants._2013_)) {
+//                    cy2013.add(res);
+//                }
+//                if (res.getYear().equals(MapConstants._2012_)) {
+//                    cy2012.add(res);
+//                }
+//                if (res.getYear().equals(MapConstants._2011_)) {
+//                    cy2011.add(res);
+//                }
+//                if (res.getYear().equals(MapConstants._2010_)) {
+//                    cy2010.add(res);
+//                }
 
             }
-            resConfs.addAll(cy2016);
-            resConfs.addAll(cy2015);
-            resConfs.addAll(cy2014);
-            resConfs.addAll(cy2013);
-            resConfs.addAll(cy2012);
-            resConfs.addAll(cy2011);
-            resConfs.addAll(cy2010);
+//            resConfs.addAll(cy2016);
+//            resConfs.addAll(cy2015);
+//            resConfs.addAll(cy2014);
+//            resConfs.addAll(cy2013);
+//            resConfs.addAll(cy2012);
+//            resConfs.addAll(cy2011);
+//            resConfs.addAll(cy2010);
 
             return resConfs;
         }

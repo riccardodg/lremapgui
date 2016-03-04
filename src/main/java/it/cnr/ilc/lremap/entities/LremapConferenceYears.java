@@ -6,11 +6,17 @@
 package it.cnr.ilc.lremap.entities;
 
 import java.io.Serializable;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -22,37 +28,69 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "LremapConferenceYears.findAll", query = "SELECT l FROM LremapConferenceYears l"),
-    @NamedQuery(name = "LremapConferenceYears.findByConf", query = "SELECT l FROM LremapConferenceYears l WHERE l.lremapConferenceYearsPK.conf = :conf"),
-    @NamedQuery(name = "LremapConferenceYears.findByYear", query = "SELECT l FROM LremapConferenceYears l WHERE l.lremapConferenceYearsPK.year = :year")})
+    @NamedQuery(name = "LremapConferenceYears.findById", query = "SELECT l FROM LremapConferenceYears l WHERE l.id = :id"),
+    @NamedQuery(name = "LremapConferenceYears.findByConf", query = "SELECT l FROM LremapConferenceYears l WHERE l.conf = :conf"),
+    @NamedQuery(name = "LremapConferenceYears.findByYear", query = "SELECT l FROM LremapConferenceYears l WHERE l.year = :year")})
 public class LremapConferenceYears implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected LremapConferenceYearsPK lremapConferenceYearsPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "CONF")
+    private String conf;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 4)
+    @Column(name = "YEAR")
+    private String year;
 
     public LremapConferenceYears() {
     }
 
-    public LremapConferenceYears(LremapConferenceYearsPK lremapConferenceYearsPK) {
-        this.lremapConferenceYearsPK = lremapConferenceYearsPK;
+    public LremapConferenceYears(Integer id) {
+        this.id = id;
     }
 
-    public LremapConferenceYears(String conf, String year) {
-        this.lremapConferenceYearsPK = new LremapConferenceYearsPK(conf, year);
+    public LremapConferenceYears(Integer id, String conf, String year) {
+        this.id = id;
+        this.conf = conf;
+        this.year = year;
     }
 
-    public LremapConferenceYearsPK getLremapConferenceYearsPK() {
-        return lremapConferenceYearsPK;
+    public Integer getId() {
+        return id;
     }
 
-    public void setLremapConferenceYearsPK(LremapConferenceYearsPK lremapConferenceYearsPK) {
-        this.lremapConferenceYearsPK = lremapConferenceYearsPK;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getConf() {
+        return conf;
+    }
+
+    public void setConf(String conf) {
+        this.conf = conf;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (lremapConferenceYearsPK != null ? lremapConferenceYearsPK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -63,7 +101,7 @@ public class LremapConferenceYears implements Serializable {
             return false;
         }
         LremapConferenceYears other = (LremapConferenceYears) object;
-        if ((this.lremapConferenceYearsPK == null && other.lremapConferenceYearsPK != null) || (this.lremapConferenceYearsPK != null && !this.lremapConferenceYearsPK.equals(other.lremapConferenceYearsPK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -71,7 +109,7 @@ public class LremapConferenceYears implements Serializable {
 
     @Override
     public String toString() {
-        return "it.cnr.ilc.lremap.entities.LremapConferenceYears[ lremapConferenceYearsPK=" + lremapConferenceYearsPK + " ]";
+        return "it.cnr.ilc.lremap.entities.LremapConferenceYears[ id=" + id + " ]";
     }
     
 }

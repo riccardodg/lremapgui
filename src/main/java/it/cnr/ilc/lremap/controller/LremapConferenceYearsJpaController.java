@@ -5,10 +5,8 @@
  */
 package it.cnr.ilc.lremap.controller;
 
-import it.cnr.ilc.lremap.controllers.exceptions.NonexistentEntityException;
-import it.cnr.ilc.lremap.controllers.exceptions.PreexistingEntityException;
+import it.cnr.ilc.lremap.controller.exceptions.NonexistentEntityException;
 import it.cnr.ilc.lremap.entities.LremapConferenceYears;
-import it.cnr.ilc.lremap.entities.LremapConferenceYearsPK;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -33,21 +31,13 @@ public class LremapConferenceYearsJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(LremapConferenceYears lremapConferenceYears) throws PreexistingEntityException, Exception {
-        if (lremapConferenceYears.getLremapConferenceYearsPK() == null) {
-            lremapConferenceYears.setLremapConferenceYearsPK(new LremapConferenceYearsPK());
-        }
+    public void create(LremapConferenceYears lremapConferenceYears) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(lremapConferenceYears);
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findLremapConferenceYears(lremapConferenceYears.getLremapConferenceYearsPK()) != null) {
-                throw new PreexistingEntityException("LremapConferenceYears " + lremapConferenceYears + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -65,7 +55,7 @@ public class LremapConferenceYearsJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                LremapConferenceYearsPK id = lremapConferenceYears.getLremapConferenceYearsPK();
+                Integer id = lremapConferenceYears.getId();
                 if (findLremapConferenceYears(id) == null) {
                     throw new NonexistentEntityException("The lremapConferenceYears with id " + id + " no longer exists.");
                 }
@@ -78,7 +68,7 @@ public class LremapConferenceYearsJpaController implements Serializable {
         }
     }
 
-    public void destroy(LremapConferenceYearsPK id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -86,7 +76,7 @@ public class LremapConferenceYearsJpaController implements Serializable {
             LremapConferenceYears lremapConferenceYears;
             try {
                 lremapConferenceYears = em.getReference(LremapConferenceYears.class, id);
-                lremapConferenceYears.getLremapConferenceYearsPK();
+                lremapConferenceYears.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The lremapConferenceYears with id " + id + " no longer exists.", enfe);
             }
@@ -123,7 +113,7 @@ public class LremapConferenceYearsJpaController implements Serializable {
         }
     }
 
-    public LremapConferenceYears findLremapConferenceYears(LremapConferenceYearsPK id) {
+    public LremapConferenceYears findLremapConferenceYears(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(LremapConferenceYears.class, id);

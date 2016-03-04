@@ -20,9 +20,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -47,27 +49,28 @@ public class LreMapSearchPanelView implements Serializable {
 
     private LremapSideTableAvail resAvail;
     private List<LremapSideTableAvail> resAvails;
-    private LremapSideTableAvail selectedResAvail = new LremapSideTableAvail();
-    
+    private LremapSideTableAvail selectedResAvail;// = new LremapSideTableAvail();
+
     private LremapSideTableModality resMod;
     private List<LremapSideTableModality> resMods;
-    private LremapSideTableModality selectedResMod = new LremapSideTableModality();
+    private LremapSideTableModality selectedResMod; //= new LremapSideTableModality();
 
     private List<LremapSideTableAvail> resOtherAvails;
     private LremapSideTableAvail selectedResOtherAvail;
-    
-    
+
     private LremapSideTableUse resUse;
     private List<LremapSideTableUse> resUses;
-    private LremapSideTableUse selectedResUse = new LremapSideTableUse();
-    
+    private LremapSideTableUse selectedResUse;// = new LremapSideTableUse();
+
     private LremapSideTableStatus resStatus;
     private List<LremapSideTableStatus> resStatuses;
-    private LremapSideTableStatus selectedResStatus = new LremapSideTableStatus();
-    
+    private LremapSideTableStatus selectedResStatus;// = new LremapSideTableStatus();
+
     private LremapConferenceYears resConf;
     private List<LremapConferenceYears> resConfs;
-    private LremapConferenceYears selectedResConf = new LremapConferenceYears();
+    private LremapConferenceYears selectedResConf;// = new LremapConferenceYears();
+    
+
     @PostConstruct
     public void init() {
         //setResNorm(service.getListOfNormResources());
@@ -79,8 +82,8 @@ public class LreMapSearchPanelView implements Serializable {
         setResStatuses(service.getResStatuses());
         setResConfs(service.getResConfs());
        
-    }
 
+    }
 
     public List<String> completeNames(String query) {
         List<String> results = Lists.newArrayList(Collections2.filter(
@@ -107,7 +110,62 @@ public class LreMapSearchPanelView implements Serializable {
         return suggestions;
     }
 
-    
+    public void filterAndSearch() {
+
+        System.err.println("**** START FILTER ****");
+        System.err.println("**** END   FILTER ****");
+        if (getName() != null) {
+            System.out.println("Name " + getName());
+            setName(getName());
+        } else {
+            System.out.println("Name NULL");
+        }
+        
+        if (getSelectedResAvail()!= null) {
+            System.out.println("Avail NOT NULL -" + getSelectedResAvail().getLremapSideTableAvailPK().getValue()+"-");
+        } else {
+            System.out.println("Avail NULL");
+        }
+        
+        if (getSelectedResUse()!= null) {
+            System.out.println("Use NOT NULL -" + getSelectedResUse().getLremapSideTableUsePK().getValue()+"-");
+        } else {
+            System.out.println("Use NULL");
+        }
+        if (getSelectedResConf() == null) {
+            System.out.println("Conf  NULL");
+        } else {
+            System.out.println("Conf  NOT NULL: -"+getSelectedResConf().getConf()+"- with YEAR -"+getSelectedResConf().getYear()+"-");
+        }
+        
+        if (getSelectedResStatus()== null) {
+            System.out.println("Status  NULL");
+        } else {
+            System.out.println("Status  NOT NULL: -"+getSelectedResStatus().getValue()+"-");
+        }
+        
+        if (getSelectedResMod()== null) {
+            System.out.println("Modality  NULL");
+        } else {
+            System.out.println("Modality  NOT NULL: -"+getSelectedResMod().getValue()+"-");
+        }
+        
+        if (getSelectedGroupedType() == null) {
+            System.out.println("Type NULL");
+        } else {
+            System.out.println("Type NOT NULL: -"+getSelectedGroupedType().getLremapSideTableGroupedtypePK().getValue());
+        }
+
+        
+
+
+    }
+
+    public void addMessage(String summary) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
     /**
      * @param service the service to set
      */

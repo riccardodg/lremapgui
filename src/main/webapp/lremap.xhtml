@@ -29,20 +29,21 @@
                         <p:growl id="msgs" showDetail="true" />
 
                         <h:panelGrid columns="2" cellpadding="5">
-                            
+
                             <p:outputLabel for="acConf" value="Conference (Year)" />
                             <p:selectOneMenu id="acConf" value="#{dtLreMapSearchPanelView.selectedResConf}" panelStyle="width:320px"
-                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains"
+                                             converter="conferenceYearsConverter">
                                 <f:selectItem itemLabel="Select A Conference" itemValue=""  />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.resConfs}" 
-                                               var="type" itemLabel="#{type.lremapConferenceYearsPK.conf} (#{type.lremapConferenceYearsPK.year})" 
+                                               var="type" itemLabel="#{type.conf} (#{type.year})" 
                                                itemValue="#{type}" />
 
                                 <p:column>
-                                    <h:outputText value="#{t.lremapConferenceYearsPK.year}"/>
+                                    <h:outputText value="#{t.year}"/>
                                 </p:column>
                                 <p:column>
-                                    <h:outputText value="#{t.lremapConferenceYearsPK.conf}" />
+                                    <h:outputText value="#{t.conf}" />
                                 </p:column>
                             </p:selectOneMenu>
                             <p:separator></p:separator><p:separator></p:separator>
@@ -53,6 +54,7 @@
                                             minQueryLength="3" 
                                             autocomplete="true" forceSelection="true" 
                                             placeholder='Type 3 chars to start autocompletion'/>
+
                             <p:separator></p:separator><p:separator></p:separator>
 
                             <p:outputLabel for="acType" value="Type" />
@@ -62,7 +64,8 @@
                                              var="t" 
                                              style="width:320px" 
                                              filter="true" 
-                                             filterMatchMode="contains">
+                                             filterMatchMode="contains"
+                                             converter="groupedTypeConverter">
                                 <f:selectItem itemLabel="Select Type" itemValue="" />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.groupedtypes}" 
                                                var="type" itemLabel="#{type.lremapSideTableGroupedtypePK.value}" 
@@ -85,7 +88,8 @@
                                              var="t" 
                                              style="width:320px" 
                                              filter="true" 
-                                             filterMatchMode="contains">
+                                             filterMatchMode="contains"
+                                             converter="availabilityConverter">
                                 <f:selectItem itemLabel="Select Availability" itemValue=""  />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.resAvails}" 
                                                var="type" itemLabel="#{type.lremapSideTableAvailPK.value}" 
@@ -102,23 +106,25 @@
                             <p:separator></p:separator><p:separator></p:separator>
                             <p:outputLabel for="acModality" value="Modality" />
                             <p:selectOneMenu id="acModality" value="#{dtLreMapSearchPanelView.selectedResMod}" panelStyle="width:180px"
-                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains"
+                                             converter="modalityConverter">
                                 <f:selectItem itemLabel="Select Modality" itemValue=""  />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.resMods}" 
                                                var="type" itemLabel="#{type.value}" 
                                                itemValue="#{type}" />
-                               <p:column>
+                                <p:column>
                                     <p:graphicImage value="images/types/#{t.grouping}.png" width="20" height="20"/>
                                 </p:column>
                                 <p:column>
                                     <h:outputText value="#{t.value}" />
                                 </p:column>
                             </p:selectOneMenu>
-                            
+
                             <p:separator></p:separator><p:separator></p:separator>
                             <p:outputLabel for="acStatus" value="Status" />
                             <p:selectOneMenu id="acStatus" value="#{dtLreMapSearchPanelView.selectedResStatus}" panelStyle="width:180px"
-                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains"
+                                             converter="statusConverter">
                                 <f:selectItem itemLabel="Select Status" itemValue=""  />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.resStatuses}" 
                                                var="type" itemLabel="#{type.value}" 
@@ -131,11 +137,12 @@
                                     <h:outputText value="#{t.value}" />
                                 </p:column>
                             </p:selectOneMenu>
-                            
+
                             <p:separator></p:separator><p:separator></p:separator>
                             <p:outputLabel for="acUse" value="Use" />
                             <p:selectOneMenu id="acUse" value="#{dtLreMapSearchPanelView.selectedResUse}" panelStyle="width:180px"
-                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains">
+                                             effect="fade" var="t" style="width:320px" filter="true" filterMatchMode="contains"
+                                             converter="useConverter">
                                 <f:selectItem itemLabel="Select Use" itemValue=""  />
                                 <f:selectItems value="#{dtLreMapSearchPanelView.resUses}" 
                                                var="type" itemLabel="#{type.lremapSideTableUsePK.value}" 
@@ -150,17 +157,21 @@
                             </p:selectOneMenu>
 
 
-
                         </h:panelGrid>
+                        <p:separator />
+
+                        <p:commandButton  value="View Results" action="#{dtLreMapSearchPanelView.filterAndSearch()}" icon="ui-icon-check" />
+
+
                     </h:form>    
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
                     <h:form>
-                        <p:dataTable var="res" value="#{dtPaginatorResourceNormView.groupedResNorm}" rows="20"
-                                     paginator="true"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="5,10,15,20,25,50,100">
+                        <p:dataTable  var="res" value="#{dtPaginatorResourceNormView.groupedResNorm}" rows="20"
+                                      paginator="true"
+                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                      rowsPerPageTemplate="5,10,15,20,25,50,100">
                             <p:column headerText="Id">
                                 <f:facet name="header">
                                     View Details

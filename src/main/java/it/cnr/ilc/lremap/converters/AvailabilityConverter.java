@@ -6,6 +6,8 @@
 package it.cnr.ilc.lremap.converters;
 
 import it.cnr.ilc.lremap.controllers.managedbeans.LreMapSearchPanelService;
+import it.cnr.ilc.lremap.entities.LremapSideTableAvail;
+import it.cnr.ilc.lremap.entities.LremapSideTableAvailPK;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtypePK;
 import java.util.Arrays;
@@ -21,10 +23,8 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Riccardo Del Gratta &lt;riccardo.delgratta@ilc.cnr.it&gt;
  */
-@FacesConverter(value = "groupedTypeConverter", forClass = LremapSideTableGroupedtype.class)
-public class GroupedTypeConverter implements Converter {
-
-    private LremapSideTableGroupedtypePK pk;
+@FacesConverter(value = "availabilityConverter", forClass = LremapSideTableAvail.class)
+public class AvailabilityConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String submittedValue) {
@@ -43,16 +43,15 @@ public class GroupedTypeConverter implements Converter {
                 if (values.length == 2) {
                     value = values[0];
                     group = values[1];
-
-                    LremapSideTableGroupedtypePK lpk = new LremapSideTableGroupedtypePK(value, group);
-                    LremapSideTableGroupedtype ret = service.findLremapSideTableGroupedtype(lpk);
+                    LremapSideTableAvailPK pk = new LremapSideTableAvailPK(value, group);
+                    LremapSideTableAvail ret = service.findLremapSideAvail(pk);
                     return ret;
                 } else {
                     return null;
                 }
 
             } catch (NumberFormatException exception) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid player"));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid Availability"));
             }
         }
 
@@ -62,28 +61,14 @@ public class GroupedTypeConverter implements Converter {
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
         String group, value;
         if (o != null && !(o instanceof String)) {
-            LremapSideTableGroupedtype ret = (LremapSideTableGroupedtype) o;
-            group = ret.getLremapSideTableGroupedtypePK().getGrouping();
-            value = ret.getLremapSideTableGroupedtypePK().getValue();
+            LremapSideTableAvail ret = (LremapSideTableAvail) o;
+            group = ret.getLremapSideTableAvailPK().getGrouping();
+            value = ret.getLremapSideTableAvailPK().getValue();
 
             return value + "%%%" + group;
         } else {
             return null;
         }
-    }
-
-    /**
-     * @return the pk
-     */
-    public LremapSideTableGroupedtypePK getPk() {
-        return pk;
-    }
-
-    /**
-     * @param pk the pk to set
-     */
-    public void setPk(LremapSideTableGroupedtypePK pk) {
-        this.pk = pk;
     }
 
 }
