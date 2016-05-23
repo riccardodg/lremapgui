@@ -10,9 +10,13 @@ import it.cnr.ilc.lremap.controller.LremapSideTableGroupedtypeJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableModalityJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableStatusJpaController;
 import it.cnr.ilc.lremap.controller.LremapSideTableUseJpaController;
+import it.cnr.ilc.lremap.controllers.LremapResourceNormLangDimJpaController;
+import it.cnr.ilc.lremap.controllers.LremapResourcePivotedLangNormJpaController;
 import it.cnr.ilc.lremap.controllers.extended.ConferenceYearsJpaControllerExtended;
 import it.cnr.ilc.lremap.controllers.extended.ResourceNormExtended;
 import it.cnr.ilc.lremap.entities.LremapConferenceYears;
+import it.cnr.ilc.lremap.entities.LremapResourceNormLangDim;
+import it.cnr.ilc.lremap.entities.LremapResourcePivotedLangNorm;
 import it.cnr.ilc.lremap.entities.LremapSideTableAvail;
 import it.cnr.ilc.lremap.entities.LremapSideTableAvailPK;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
@@ -46,6 +50,12 @@ public class LreMapSearchPanelService {
     private List<LremapSideTableUse> resUses = new ArrayList<LremapSideTableUse>();
     private List<LremapSideTableStatus> resStatuses = new ArrayList<LremapSideTableStatus>();
     private List<LremapConferenceYears> resConfs = new ArrayList<LremapConferenceYears>();
+    private List<LremapResourceNormLangDim> resLangDims = new ArrayList<LremapResourceNormLangDim>();
+    private List<String> langDims = new ArrayList<String>();
+    
+    private List<LremapResourcePivotedLangNorm> resPivotedLangs = new ArrayList<LremapResourcePivotedLangNorm>();
+    private List<String> langs = new ArrayList<String>();
+    
 
     public List<LremapSideTableAvail> getResAllAvails() {
         return resAllAvails;
@@ -64,11 +74,13 @@ public class LreMapSearchPanelService {
     LremapSideTableUseJpaController useController = new LremapSideTableUseJpaController(emf);
     LremapSideTableStatusJpaController statusController = new LremapSideTableStatusJpaController(emf);
     ConferenceYearsJpaControllerExtended confController = new ConferenceYearsJpaControllerExtended(emf);
+    LremapResourceNormLangDimJpaController langdimController = new LremapResourceNormLangDimJpaController(emf);
+    LremapResourcePivotedLangNormJpaController pivotedlangController = new LremapResourcePivotedLangNormJpaController(emf);
 
     public List<String> getDistinctNames() {
 
         if (names.isEmpty()) {
-            names = resNormController.findDistinctTypesFromLremapResourceNorm();
+            names = resNormController.findDistinctNamesFromLremapResourceNorm();
         }
         return names;
     }
@@ -392,6 +404,122 @@ public class LreMapSearchPanelService {
      */
     public void setResConfs(List<LremapConferenceYears> resConfs) {
         this.resConfs = resConfs;
+    }
+
+    public List<LremapResourceNormLangDim> getResLangDim() {
+        List<String> already = new ArrayList<String>();
+        String dim = "";
+        
+        List<LremapResourceNormLangDim> all;// =new ArrayList<LremapSideTableAvail>();
+        //List<LremapSideTableAvail> all =new ArrayList<LremapSideTableAvail>();
+        if (!resLangDims.isEmpty()) {
+            return resLangDims;
+        } else {
+
+            all = langdimController.findLremapResourceNormLangDimEntities();
+            for (LremapResourceNormLangDim res : all) {
+                dim=res.getLremapResourceNormLangDimPK().getLangType();
+                if (!already.contains(dim)){
+                    already.add(dim);
+                }
+
+            }
+            
+            resLangDims.addAll(all);
+            //setResOtherAvails(other);
+            
+            setResLangDims(all);
+            setLangDims(already);
+
+            return resLangDims;
+        }
+        
+    }
+    
+    public List<LremapResourcePivotedLangNorm> getResLangs() {
+        List<String> already = new ArrayList<String>();
+        String dim = "";
+        
+        List<LremapResourcePivotedLangNorm> all;// =new ArrayList<LremapSideTableAvail>();
+        //List<LremapSideTableAvail> all =new ArrayList<LremapSideTableAvail>();
+        if (!resPivotedLangs.isEmpty()) {
+            return resPivotedLangs;
+        } else {
+
+            all = pivotedlangController.findLremapResourcePivotedLangNormEntities();
+            for (LremapResourcePivotedLangNorm res : all) {
+                dim=res.getLremapResourcePivotedLangNormPK().getLanguage();
+                if (!already.contains(dim)){
+                    already.add(dim);
+                }
+
+            }
+            
+            resPivotedLangs.addAll(all);
+            //setResOtherAvails(other);
+            
+            setResPivotedLangs(all);
+            setLangs(already);
+
+            return resPivotedLangs;
+        }
+        
+    }
+
+    /**
+     * @return the resLangDims
+     */
+    public List<LremapResourceNormLangDim> getResLangDims() {
+        return resLangDims;
+    }
+
+    /**
+     * @param resLangDims the resLangDims to set
+     */
+    public void setResLangDims(List<LremapResourceNormLangDim> resLangDims) {
+        this.resLangDims = resLangDims;
+    }
+
+    /**
+     * @return the langDims
+     */
+    public List<String> getLangDims() {
+        return langDims;
+    }
+
+    /**
+     * @param langDims the langDims to set
+     */
+    public void setLangDims(List<String> langDims) {
+        this.langDims = langDims;
+    }
+
+    /**
+     * @return the resPivotedLangs
+     */
+    public List<LremapResourcePivotedLangNorm> getResPivotedLangs() {
+        return resPivotedLangs;
+    }
+
+    /**
+     * @param resPivotedLangs the resPivotedLangs to set
+     */
+    public void setResPivotedLangs(List<LremapResourcePivotedLangNorm> resPivotedLangs) {
+        this.resPivotedLangs = resPivotedLangs;
+    }
+
+    /**
+     * @return the langs
+     */
+    public List<String> getLangs() {
+        return langs;
+    }
+
+    /**
+     * @param langs the langs to set
+     */
+    public void setLangs(List<String> langs) {
+        this.langs = langs;
     }
 
 }

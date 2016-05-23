@@ -9,7 +9,6 @@ import it.cnr.ilc.lremap.controller.LremapResourceNormJpaController;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NamedQuery;
 import javax.persistence.Query;
 
 /**
@@ -26,8 +25,8 @@ public class ResourceNormExtended extends LremapResourceNormJpaController{
     public List<String> findDistinctNamesFromLremapResourceNorm() {
         List<String> out;
         EntityManager em = getEntityManager();
-        Query q = em.createNamedQuery("SELECT distinct l.name FROM LremapResourceNorm l order by 1 asc");
-        //Query q = em.createNamedQuery("LremapResourceNorm.findDistinctName");
+        //Query q = em.createNamedQuery("SELECT distinct l.name FROM LremapResourceNorm l order by 1 asc");
+        Query q = em.createNamedQuery("LremapResourceNorm.findDistinctName");
         try {
             out=q.getResultList();
             //System.err.println("AAA "+out);

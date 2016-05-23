@@ -32,7 +32,7 @@ public class PaginatorResourceNormView implements Serializable {
     @PostConstruct
     public void init() {
         //setResNorm(service.getListOfNormResources());
-        setGroupedResNorm(service.getListOfViewedNormResources());
+        //setGroupedResNorm(service.getListOfViewedNormResources());
     }
 
     
@@ -66,5 +66,12 @@ public class PaginatorResourceNormView implements Serializable {
      */
     public void setGroupedResNorm(List<ViewedResourceNorm> groupedResNorm) {
         this.groupedResNorm = groupedResNorm;
+    }
+
+    /**
+     * @return the service
+     */
+    public ResNormService getService() {
+        return service;
     }
 }

@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "lremap_resource_norm")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "LremapResourceNorm.findDistinctName1", query = "SELECT distinct l.name FROM LremapResourceNorm l"),
+    @NamedQuery(name = "LremapResourceNorm.findDistinctName", query = "SELECT distinct l.name FROM LremapResourceNorm l"),
     @NamedQuery(name = "LremapResourceNorm.findDistinctType", query = "SELECT distinct l.type FROM LremapResourceNorm l"),
     @NamedQuery(name = "LremapResourceNorm.findDistinctStatus", query = "SELECT distinct l.prodstatus FROM LremapResourceNorm l"),
     @NamedQuery(name = "LremapResourceNorm.findDistinctUse", query = "SELECT distinct l.resourceusage FROM LremapResourceNorm l"),

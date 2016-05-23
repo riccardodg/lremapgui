@@ -9,7 +9,10 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import it.cnr.ilc.lremap.controllers.managedbeans.LreMapSearchPanelService;
+import it.cnr.ilc.lremap.controllers.managedbeans.ResNormService;
 import it.cnr.ilc.lremap.entities.LremapConferenceYears;
+import it.cnr.ilc.lremap.entities.LremapResourceNormLangDim;
+import it.cnr.ilc.lremap.entities.LremapResourcePivotedLangNorm;
 import it.cnr.ilc.lremap.entities.LremapSideTableAvail;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtype;
 import it.cnr.ilc.lremap.entities.LremapSideTableGroupedtypePK;
@@ -18,6 +21,7 @@ import it.cnr.ilc.lremap.entities.LremapSideTableStatus;
 import it.cnr.ilc.lremap.entities.LremapSideTableUse;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -36,6 +40,14 @@ public class LreMapSearchPanelView implements Serializable {
 
     @ManagedProperty("#{lreMapSearchPanelService}")
     private LreMapSearchPanelService service;
+
+    //@ManagedProperty("#{resNormService}")
+    @ManagedProperty("#{dtPaginatorResourceNormView}")
+    private PaginatorResourceNormView respaginatorview;
+
+    @ManagedProperty("#{resNormService}")
+    private ResNormService resnormservice;
+    //ResNormService resnormservice=respaginatorview.getService();
     private List<String> names = new ArrayList<String>();
     private List<String> types = new ArrayList<String>();
     private String name;
@@ -69,7 +81,20 @@ public class LreMapSearchPanelView implements Serializable {
     private LremapConferenceYears resConf;
     private List<LremapConferenceYears> resConfs;
     private LremapConferenceYears selectedResConf;// = new LremapConferenceYears();
+    private List<LremapResourceNormLangDim> resLangDim;
+    private List<LremapResourcePivotedLangNorm> resPivotedLang;
+
+    // strings and list of string for languages and dimensions
+    private List<String> langDims = new ArrayList<String>();
+    private String langDim = "";
     
+    private List<String> langs = new ArrayList<String>();
+    private String lang = "";
+
+    // list of filters
+    //private HashMap<String, String> filterHm = new HashMap<String, String>();
+    private int total = 0;
+    private int distinct = 0;
 
     @PostConstruct
     public void init() {
@@ -81,7 +106,10 @@ public class LreMapSearchPanelView implements Serializable {
         setResUses(service.getResUses());
         setResStatuses(service.getResStatuses());
         setResConfs(service.getResConfs());
-       
+        setResLangDim(service.getResLangDim());
+        setLangDims(service.getLangDims());
+        setResPivotedLang(service.getResLangs());
+        setLangs(service.getLangs());
 
     }
 
@@ -111,53 +139,98 @@ public class LreMapSearchPanelView implements Serializable {
     }
 
     public void filterAndSearch() {
+        HashMap<String, String> filterHm = new HashMap<String, String>();
+        HashMap<String, String> otherFilterHm = new HashMap<String, String>();
+        String CONF, YEAR, type, name, prodstatus, modality,
+                resourceusage, avail, dim, lang;
 
         System.err.println("**** START FILTER ****");
         System.err.println("**** END   FILTER ****");
-        if (getName() != null) {
+        if (getName() != null && getName().trim().length() > 0) {
+            name = getName();
             System.out.println("Name " + getName());
             setName(getName());
+            filterHm.put("name", name);
         } else {
             System.out.println("Name NULL");
         }
-        
-        if (getSelectedResAvail()!= null) {
-            System.out.println("Avail NOT NULL -" + getSelectedResAvail().getLremapSideTableAvailPK().getValue()+"-");
+
+        if (getSelectedResAvail() != null) {
+            avail = getSelectedResAvail().getLremapSideTableAvailPK().getValue();
+            System.out.println("Avail NOT NULL -" + avail + "-");
+            filterHm.put("avail", avail);
         } else {
             System.out.println("Avail NULL");
         }
-        
-        if (getSelectedResUse()!= null) {
-            System.out.println("Use NOT NULL -" + getSelectedResUse().getLremapSideTableUsePK().getValue()+"-");
+
+        if (getSelectedResUse() != null) {
+            resourceusage = getSelectedResUse().getLremapSideTableUsePK().getValue();
+            System.out.println("Use NOT NULL -" + resourceusage + "-");
+            filterHm.put("resourceusage", resourceusage);
         } else {
             System.out.println("Use NULL");
         }
         if (getSelectedResConf() == null) {
             System.out.println("Conf  NULL");
         } else {
-            System.out.println("Conf  NOT NULL: -"+getSelectedResConf().getConf()+"- with YEAR -"+getSelectedResConf().getYear()+"-");
+            CONF = getSelectedResConf().getConf();
+            YEAR = getSelectedResConf().getYear();
+            System.out.println("Conf  NOT NULL: -" + CONF + "- with YEAR -" + YEAR + "-");
+            filterHm.put("conf", CONF);
+            filterHm.put("year", YEAR);
         }
-        
-        if (getSelectedResStatus()== null) {
+
+        if (getSelectedResStatus() == null) {
             System.out.println("Status  NULL");
         } else {
-            System.out.println("Status  NOT NULL: -"+getSelectedResStatus().getValue()+"-");
+            prodstatus = getSelectedResStatus().getValue();
+            System.out.println("Status  NOT NULL: -" + prodstatus + "-");
+            filterHm.put("prodstatus", prodstatus);
         }
-        
-        if (getSelectedResMod()== null) {
+
+        if (getSelectedResMod() == null) {
             System.out.println("Modality  NULL");
         } else {
-            System.out.println("Modality  NOT NULL: -"+getSelectedResMod().getValue()+"-");
+            modality = getSelectedResMod().getValue();
+            System.out.println("Modality  NOT NULL: -" + modality + "-");
+            filterHm.put("modality", modality);
         }
-        
+
         if (getSelectedGroupedType() == null) {
             System.out.println("Type NULL");
         } else {
-            System.out.println("Type NOT NULL: -"+getSelectedGroupedType().getLremapSideTableGroupedtypePK().getValue());
+            type = getSelectedGroupedType().getLremapSideTableGroupedtypePK().getValue();
+            System.out.println("Type NOT NULL: -" + type);
+            filterHm.put("type", type);
         }
 
+        if ((getLangDim() != null)) {
+            if (!"".equals(getLangDim().trim())) {
+                dim = getLangDim();
+                System.out.println("DIM NOT NULL: -" + dim);
+                otherFilterHm.put("dim", dim);
+            } else {
+                System.out.println("DIM VOID");
+            }
+        } else {
+            System.out.println("DIM NULL");
+        }
         
-
+        if ((getLang() != null)) {
+            if (!"".equals(getLang().trim())) {
+                lang = getLang();
+                System.out.println("LANG NOT NULL: -" + lang);
+                otherFilterHm.put("lang", lang);
+            } else {
+                System.out.println("LANG VOID");
+            }
+        } else {
+            System.out.println("LANG NULL");
+        }
+        //setFilterHm(filterHm);
+        getRespaginatorview().setGroupedResNorm(getResnormservice().getListOfViewedNormResourcesFromFilters(filterHm, otherFilterHm));
+        setDistinct(getResnormservice().getDistinct());
+        setTotal(getResnormservice().getTotal());
 
     }
 
@@ -538,6 +611,159 @@ public class LreMapSearchPanelView implements Serializable {
      */
     public void setSelectedResConf(LremapConferenceYears selectedResConf) {
         this.selectedResConf = selectedResConf;
+    }
+
+//    /**
+//     * @return the filterHm
+//     */
+//    public HashMap<String, String> getFilterHm() {
+//        return filterHm;
+//    }
+//
+//    /**
+//     * @param filterHm the filterHm to set
+//     */
+//    public void setFilterHm(HashMap<String, String> filterHm) {
+//        this.filterHm = filterHm;
+//    }
+    /**
+     * @return the resnormservice
+     */
+    public ResNormService getResnormservice() {
+        return resnormservice;
+    }
+
+    /**
+     * @param resnormservice the resnormservice to set
+     */
+    public void setResnormservice(ResNormService resnormservice) {
+        this.resnormservice = resnormservice;
+    }
+
+    /**
+     * @return the respaginatorview
+     */
+    public PaginatorResourceNormView getRespaginatorview() {
+        return respaginatorview;
+    }
+
+    /**
+     * @param respaginatorview the respaginatorview to set
+     */
+    public void setRespaginatorview(PaginatorResourceNormView respaginatorview) {
+        this.respaginatorview = respaginatorview;
+    }
+
+    /**
+     * @return the total
+     */
+    public int getTotal() {
+        return total;
+    }
+
+    /**
+     * @param total the total to set
+     */
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    /**
+     * @return the distinct
+     */
+    public int getDistinct() {
+        return distinct;
+    }
+
+    /**
+     * @param distinct the distinct to set
+     */
+    public void setDistinct(int distinct) {
+        this.distinct = distinct;
+    }
+
+    /**
+     * @return the resLangDim
+     */
+    public List<LremapResourceNormLangDim> getResLangDim() {
+        return resLangDim;
+    }
+
+    /**
+     * @param resLangDim the resLangDim to set
+     */
+    public void setResLangDim(List<LremapResourceNormLangDim> resLangDim) {
+        this.resLangDim = resLangDim;
+    }
+
+    /**
+     * @return the langDims
+     */
+    public List<String> getLangDims() {
+        return langDims;
+    }
+
+    /**
+     * @param langDims the langDims to set
+     */
+    public void setLangDims(List<String> langDims) {
+        this.langDims = langDims;
+    }
+
+    /**
+     * @return the langDim
+     */
+    public String getLangDim() {
+        return langDim;
+    }
+
+    /**
+     * @param langDim the langDim to set
+     */
+    public void setLangDim(String langDim) {
+        this.langDim = langDim;
+    }
+
+    /**
+     * @return the langs
+     */
+    public List<String> getLangs() {
+        return langs;
+    }
+
+    /**
+     * @param langs the langs to set
+     */
+    public void setLangs(List<String> langs) {
+        this.langs = langs;
+    }
+
+    /**
+     * @return the lang
+     */
+    public String getLang() {
+        return lang;
+    }
+
+    /**
+     * @param lang the lang to set
+     */
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    /**
+     * @return the resPivotedLang
+     */
+    public List<LremapResourcePivotedLangNorm> getResPivotedLang() {
+        return resPivotedLang;
+    }
+
+    /**
+     * @param resPivotedLang the resPivotedLang to set
+     */
+    public void setResPivotedLang(List<LremapResourcePivotedLangNorm> resPivotedLang) {
+        this.resPivotedLang = resPivotedLang;
     }
 
 }

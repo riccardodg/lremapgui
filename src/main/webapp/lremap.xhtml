@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:p="http://primefaces.org/ui">
 
     <f:view contentType="text/html">
@@ -13,19 +14,20 @@
         </h:head>
 
         <h:body>
+            <h:form id="filterform">
 
-            <p:layout fullPage="true">
+                <p:layout fullPage="true">
 
-                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                    Header
-                </p:layoutUnit>
+                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                        Header
+                    </p:layoutUnit>
 
-                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
-                    Footer
-                </p:layoutUnit>
+                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                        Footer
+                    </p:layoutUnit>
 
-                <p:layoutUnit position="west" size="800" header="Search Parameters" collapsible="true">
-                    <h:form>
+                    <p:layoutUnit position="west" size="800" header="Search Parameters" collapsible="true">
+                        <!--                    <h:form id="filterform">-->
                         <p:growl id="msgs" showDetail="true" />
 
                         <h:panelGrid columns="2" cellpadding="5">
@@ -155,31 +157,50 @@
                                     <h:outputText value="#{t.lremapSideTableUsePK.value}" />
                                 </p:column>
                             </p:selectOneMenu>
+                            <p:separator></p:separator><p:separator></p:separator>
+
+                            <p:outputLabel for="acLang" value="Language" />
+                            <p:selectOneMenu id="acLang" value="#{dtLreMapSearchPanelView.lang}" style="width:320px" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemLabel="Select a Language" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{dtLreMapSearchPanelView.langs}" />
+                                </p:selectOneMenu>
+                            
+                            <p:separator></p:separator><p:separator></p:separator>
+
+                            <p:outputLabel for="acLangMod" value="Language Dimension" />
+                            <p:selectOneMenu id="acLangMod" value="#{dtLreMapSearchPanelView.langDim}" style="width:320px" filter="true" filterMatchMode="contains" >
+                                    <f:selectItem itemLabel="Select a Language Dimension" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{dtLreMapSearchPanelView.langDims}" />
+                                </p:selectOneMenu>
+                            
 
 
                         </h:panelGrid>
                         <p:separator />
 
-                        <p:commandButton  value="View Results" action="#{dtLreMapSearchPanelView.filterAndSearch()}" icon="ui-icon-check" />
+                        <p:commandButton  value="View Results" action="#{dtLreMapSearchPanelView.filterAndSearch()}" icon="ui-icon-check" update="resmap" />
 
 
-                    </h:form>    
-                </p:layoutUnit>
+                        <!--</h:form>-->    
+                    </p:layoutUnit>
 
-                <p:layoutUnit position="center">
-                    <h:form>
-                        <p:dataTable  var="res" value="#{dtPaginatorResourceNormView.groupedResNorm}" rows="20"
+                    <p:layoutUnit position="center" header="Resources">
+                        <!--                    <h:form id="resform">-->
+                        <p:dataTable  id="resmap" var="res" value="#{dtPaginatorResourceNormView.groupedResNorm}" rows="20"
                                       paginator="true"
                                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                       rowsPerPageTemplate="5,10,15,20,25,50,100">
+                            <f:facet name="header">
+                                #{dtLreMapSearchPanelView.total} instances and #{dtLreMapSearchPanelView.distinct} distinct resources.
+                            </f:facet>
                             <p:column headerText="Id">
                                 <f:facet name="header">
-                                    View Details
+                                    View Details 
                                 </f:facet>
                                 <p:column style="width:16px">
                                     <p:rowToggler />
                                 </p:column>
-                                <h:outputText value="#{res.ruuid}" />
+                                <h:outputText value="#{res.ruuid} (#{fn:length(res.resNorms)})" />
                             </p:column>
 
                             <p:column headerText="Name">
@@ -219,12 +240,18 @@
 
                                 </p:dataTable>
                             </p:rowExpansion>
+                            <f:facet name="footer">
+                                #{dtLreMapSearchPanelView.total} instances and #{dtLreMapSearchPanelView.distinct} distinct resources.
+                            </f:facet>
                         </p:dataTable>
-                    </h:form>
+<!--                        <p:commandButton  value="View Results" action="#{dtLreMapSearchPanelView.filterAndSearch()}" icon="ui-icon-check" update="resmap" process=":filterform,@this"/>-->
 
-                </p:layoutUnit>
+                        <!--                    </h:form>-->
 
-            </p:layout>
+                    </p:layoutUnit>
+
+                </p:layout>
+            </h:form>
 
         </h:body>
 
